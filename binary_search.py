@@ -83,10 +83,10 @@ def argmin(f, lo, hi, epsilon=1e-3):
         xs = [lo, p1, p2, hi]
         evallist = [f(x) for x in xs]
 
-        myDict = {k: v for (k, v) in zip(xs, evallist)}
-        sortDict = sorted(myDict.items(), key=lambda kv: kv[1])
+        mydict = {k: v for (k, v) in zip(xs, evallist)}
+        sortdict = sorted(mydict.items(), key=lambda kv: kv[1])
 
-        if sortDict[0][0] > sortDict[1][0]:
-            return argmin(f, sortDict[1][0], sortDict[0][0], epsilon)
+        if sortdict[0][0] > sortdict[1][0]:
+            return argmin(f, sortdict[1][0], sortdict[0][0], epsilon)
         else:
-            return argmin(f, sortDict[0][0], sortDict[1][0], epsilon)
+            return argmin(f, sortdict[0][0], sortdict[1][0], epsilon)
