@@ -7,40 +7,25 @@ Pay very close attention to your list indexes and your < vs <= operators.
 
 
 def find_smallest_positive(xs):
-    '''
-    Assume that xs is a list of numbers sorted from LOWEST to HIGHEST.
-    Find the index of the smallest positive number.
-    If no such index exists, return `None`.
-
-    HINT:
-    This is essentially the binary search algorithm from class,
-    but you're always searching for 0.
-
-    APPLICATION:
-    This is a classic question for technical interviews.
-
-    >>> find_smallest_positive([-3, -2, -1, 0, 1, 2, 3])
-    4
-    >>> find_smallest_positive([1, 2, 3])
-    0
-    >>> find_smallest_positive([-3, -2, -1]) is None
-    True
-    '''
     if len(xs) == 0:
         return None
-    elif len(xs) == 1:
-        if xs[0] > 0:
-            return 0
-        else:
-            return None
-    else:
-        if min(xs) > 0:
-            return 0
-        elif max(xs) <= 0:
-            return None
-        else:
-            neg = [num for num in xs if num <= 0]
-            return len(neg)
+    elif xs[-1] <= 0:
+        return None
+
+    def go(left, right):
+        mid = (left + right)//2
+        if xs[mid] == 0:
+            return mid + 1
+        if left == right:
+            return left
+        if xs[mid] < 0:
+            left = mid + 1
+        if xs[mid] > 0:
+            right = mid
+
+        return go(left, right)
+
+    return go(0, len(xs) - 1)
 
 
 def count_repeats(xs, x):
@@ -48,7 +33,6 @@ def count_repeats(xs, x):
     Assume that xs is a list of numbers sorted from HIGHEST to LOWEST,
     and that x is a number.
     Calculate the number of times that x occurs in xs.
-
     HINT:
     Use the following three step procedure:
         1) use binary search to find the lowest index with a value >= x
@@ -58,19 +42,62 @@ def count_repeats(xs, x):
     and write your own doctests for these functions.
     Then, once you're sure these functions work independently,
     completing step 3 will be easy.
-
     APPLICATION:
     This is a classic question for technical interviews.
-
     >>> count_repeats([5, 4, 3, 3, 3, 3, 3, 3, 3, 2, 1], 3)
     7
     >>> count_repeats([3, 2, 1], 4)
     0
     '''
 
-    xlist = [num for num in xs if num == x]
+    def greater(left, right):
+        mid = (left + right) // 2
+        if xs[mid] == x:
+            if xs[mid - 1] > x:
+                return mid - 1
+            else:
+                right = mid - 1
+                return greater(left, right)
+        if xs[mid] > x:
+            left = mid
+            return greater(left, right)
 
-    return len(xlist)
+        if xs[mid] < x:
+            right = mid
+            return greater(left, right)
+
+    def less(left, right):
+        mid = (left + right) // 2
+        if xs[mid] == x:
+            if xs[mid + 1] < x:
+                return mid + 1
+            else:
+                left = mid + 1
+                return less(left, right)
+        if xs[mid] < x:
+            right = mid
+            return less(left, right)
+        if xs[mid] > x:
+            left = mid
+            return less(left, right)
+
+    if len(xs) == 0:
+        return 0
+
+    if xs[0] == x:
+        if xs[-1] == x:
+            return len(xs)
+        else:
+            return less(0, len(xs) - 1)
+    elif xs[-1] == x:
+        if xs[-2] == x:
+            return len(xs) - greater(0, len(xs) - 1) - 1
+        else:
+            return 1
+    if xs[-1] > x:
+        return 0
+
+    return less(0, len(xs) - 1) - greater(0, len(xs) - 1) - 1
 
 
 def argmin(f, lo, hi, epsilon=1e-3):
