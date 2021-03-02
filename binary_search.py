@@ -134,7 +134,7 @@ def find_boundaries(f, lo=-1, hi=1):
         you're done; return lo,hi
     '''
 
-    mid = (lo+hi)/2
+    mid = (lo + hi) / 2
 
     if f(lo) > f(mid):
         lo *= 2
