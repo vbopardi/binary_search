@@ -117,3 +117,42 @@ def argmin(f, lo, hi, epsilon=1e-3):
             return argmin(f, sortdict[1][0], sortdict[0][0], epsilon)
         else:
             return argmin(f, sortdict[0][0], sortdict[1][0], epsilon)
+
+
+def find_boundaries(f, lo=-1, hi=1):
+    '''
+    Returns a tuple (lo,hi).
+    This function is useful for initializing argmin.
+    HINT:
+    Begin with initial values lo=-1, hi=1.
+    Let mid = (lo+hi)/2
+    if f(lo) > f(mid):
+        recurse with lo*=2
+    elif f(hi) < f(mid):
+        recurse with hi*=2
+    else:
+        you're done; return lo,hi
+    '''
+
+    mid = (lo+hi)/2
+
+    if f(lo) > f(mid):
+        lo *= 2
+        return find_boundaries(f, lo, hi)
+    elif f(hi) < f(mid):
+        hi *= 2
+        return find_boundaries(f, lo, hi)
+    else:
+        return (lo, hi)
+
+
+def argmin_simple(f, epsilon=1e-3):
+    '''
+    you do not need to specify lo and hi.
+    NOTE:
+    There is nothing to implement for this function.
+    If you implement the find_boundaries function correctly,
+    then this function will work correctly too.
+    '''
+    lo, hi = find_boundaries(f)
+    return argmin(f, lo, hi, epsilon)
