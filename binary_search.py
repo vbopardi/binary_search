@@ -119,7 +119,7 @@ def argmin(f, lo, hi, epsilon=1e-3):
             return argmin(f, sortdict[0][0], sortdict[1][0], epsilon)
 
 
-def find_boundaries(f, lo=-1, hi=1):
+def find_boundaries(f):
     '''
     Returns a tuple (lo,hi).
     This function is useful for initializing argmin.
@@ -134,16 +134,30 @@ def find_boundaries(f, lo=-1, hi=1):
         you're done; return lo,hi
     '''
 
-    mid = (lo + hi) / 2
+    lo = -1
+    mid = 0
+    hi = 1
+    f_lo = f(lo)
+    f_mid = f(mid)
+    f_hi = f(hi)
 
-    if f(lo) > f(mid):
-        lo *= 2
-        return find_boundaries(f, lo, hi)
-    elif f(hi) < f(mid):
-        hi *= 2
-        return find_boundaries(f, lo, hi)
-    else:
-        return (lo, hi)
+    while not (f_lo >= f_mid and f_mid <= f_hi):
+        if f_lo < f_mid:
+            lo_old = lo
+            f_lo_old = f_lo
+            lo *= 2
+            f_lo = f(lo)
+            mid = lo_old
+            f_mid = f_lo_old
+        else:
+            hi_old = hi
+            f_hi_old = f_hi
+            hi *= 2
+            f_hi = f(hi)
+            mid = hi_old
+            f_mid = f_hi_old
+
+    return lo, hi
 
 
 def argmin_simple(f, epsilon=1e-3):
