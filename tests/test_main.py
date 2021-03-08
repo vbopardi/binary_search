@@ -62,7 +62,7 @@ def test__count_repeats_6():
     assert count_repeats([5, 4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, -1],-1)==1
 
 def test__count_repeats_7():
-    assert count_repeats([5, 4, 3, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 1],-1)==0
+    assert count_repeats([5, 4, 3, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0],-1)==0
 
 def test__count_repeats_8():
     assert count_repeats([5],1)==0
